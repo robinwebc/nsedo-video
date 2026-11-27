@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="bn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#14202B" />
+    <meta name="description" content="nSedo Video — Bangla-first on-device AI video editor." />
+    <title>nSedo Video</title>
+    <link rel="icon" href="%BASE_URL%favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="%BASE_URL%manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="%BASE_URL%icons/icon-192.png" />
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem("nsedo.theme");
+          if (theme !== "light" && theme !== "dark") {
+            theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          }
+          document.documentElement.setAttribute("data-theme", theme);
+          var lang = localStorage.getItem("nsedo.lang");
+          if (lang === "en" || lang === "bn") document.documentElement.lang = lang;
+        } catch (e) {}
+        window.coi = {
+          quiet: true,
+          coepCredentialless: function () {
+            return true;
+          },
+          shouldRegister: function () {
+            var host = location.hostname;
+            return host !== "localhost" && host !== "127.0.0.1";
+          },
+        };
+      })();
+    </script>
+    <script src="%BASE_URL%coi-serviceworker.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
