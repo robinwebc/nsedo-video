@@ -23,11 +23,18 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
-      - uses: android-actions/setup-android@v3
       - name: Install Android SDK packages
         run: |
-          yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager --install "platforms;android-35" "build-tools;35.0.0"
+          if [ -z "$ANDROID_HOME" ]; then
+            echo "ANDROID_HOME is not set on this runner" >&2
+            exit 1
+          fi
+          SM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SM" ]; then
+            SM="$(find "$ANDROID_HOME" -type f -name sdkmanager | head -1)"
+          fi
+          yes | "$SM" --licenses >/dev/null || true
+          "$SM" --install "platforms;android-35" "build-tools;35.0.0"
       - run: npm ci
       - run: npm test
       - run: npm run build:android
